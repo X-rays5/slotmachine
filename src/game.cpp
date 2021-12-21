@@ -52,8 +52,24 @@ void PrintResults(const std::array<std::string, 6>& fruits, std::uint32_t res[])
   std::cout << " | " << fruits[res[2]] << " |\n";
 }
 
+std::uint32_t GetLongestString(const std::array<std::string, 6>& fruits) {
+  std::uint32_t longest_word_len = 0;
+  for (const auto& fruit : fruits) {
+    if (fruit.length() > longest_word_len) {
+      longest_word_len = fruit.length();
+    }
+  }
+  return longest_word_len;
+}
 void Game() {
-  std::array<std::string, 6> fruits = { "apple", "orange", "cherry", "strawberry", "lemon", "banana" };
+  auto fruits = []() {
+    std::array<std::string, 6> fruit = { "apple", "orange", "cherry", "strawberry", "lemon", "banana" };
+    std::uint32_t longest_word_len = GetLongestString(fruit);
+    for (auto&& elem : fruit) {
+      elem.append(longest_word_len - elem.length(), ' ');
+    }
+    return fruit;
+  }();
 
   Random random;
   std::uint32_t res[3] = {random.Get<std::uint32_t>(0, fruits.size() - 1), random.Get<std::uint32_t>(0, fruits.size() - 1), random.Get<std::uint32_t>(0, fruits.size() - 1)};
