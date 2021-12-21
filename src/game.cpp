@@ -7,6 +7,8 @@
 #include <array>
 #include <thread>
 #include <fstream>
+#define OOF_IMPL
+#include <oof.h>
 #include "random.hpp"
 
 inline void EraseLines() {
@@ -62,15 +64,21 @@ void Game() {
   for (int i = 0; i <= spin_count; i++) {
     tick = GetTick(tick, fruits.size(), random);
     for (int j = 0; j < 3; j++) {
+      if (j == 1) {
+        const oof::color color{ 255, 255, 255 };
+        std::cout << oof::fg_color(color);
+      }
       if (j == 0 && i + 1 == spin_count) {
         PrintResults(fruits, res);
       } else if (j == 1 && i == spin_count) {
         PrintResults(fruits, res);
+        std::cout << oof::reset_formatting();
       } else {
         std::cout << "| " << fruits[tick[j][0]];
         std::cout << " | " << fruits[tick[j][1]];
         std::cout << " | " << fruits[tick[j][2]] << " |" << std::endl;
       }
+      std::cout << oof::reset_formatting();
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(TIME_BETWEEN_SPINS_MS));
     if (i != spin_count) {
@@ -86,7 +94,8 @@ void Game() {
   ini::Parser ini;
   ini.Parse(STATS_FILE_NAME);
   if (res[0] == res[1] && res[0] == res[2]) {
-    std::cout << "Jackpot!" << std::endl;
+    const oof::color color{ 11, 184, 28 };
+    std::cout << oof::fg_color(color) << "Jackpot!" << oof::reset_formatting() << std::endl;
     if (std::string jackpots = ini.GetDefault("jackpots"); jackpots.empty()) {
         ini.AddKVDefault("jackpots", "1");
     }
@@ -94,7 +103,8 @@ void Game() {
         ini.AddKVDefault("jackpots", std::to_string(std::stoi(jackpots) + 1));
     }
   } else if (res[0] == res[1] || res[0] == res[2] || res[1] == res[2]) {
-    std::cout << "You won!" << std::endl;
+    const oof::color color{ 11, 184, 28 };
+    std::cout << oof::fg_color(color) << "You won!" << oof::reset_formatting() << std::endl;
     if (std::string won = ini.GetDefault("won"); won.empty()) {
         ini.AddKVDefault("won", "1");
     }
@@ -102,7 +112,8 @@ void Game() {
         ini.AddKVDefault("won", std::to_string(std::stoi(won) + 1));
     }
   } else {
-    std::cout << "You lost!" << std::endl;
+    const oof::color color{ 184, 17, 17 };
+    std::cout << oof::fg_color(color) << "You lost!" << oof::reset_formatting() << std::endl;
     if (std::string lost = ini.GetDefault("lost"); lost.empty()) {
         ini.AddKVDefault("lost", "1");
     }

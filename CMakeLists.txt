@@ -6,3 +6,4 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(slotmachine src/main.cpp src/random.hpp src/console.hpp src/game.cpp src/game.hpp)
 
 target_include_directories(slotmachine PRIVATE vendor/inireader)
+target_include_directories(slotmachine PRIVATE vendor/oof)
